@@ -49,14 +49,40 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 		<PackageReference Include="System.Net.Http" Version="4.3.4" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="LoginPage.xaml">
+	  <MauiXaml Update="Pages\LoginPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\MainMenuPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\RegisterPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\SpeciesInfoPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Models\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Update="LoginPage2.xaml.cs">
+	    <DependentUpon>LoginPage2.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="MainMenuPage2.xaml.cs">
+	    <DependentUpon>MainMenuPage2.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="RegisterPage2.xaml.cs">
+	    <DependentUpon>RegisterPage2.xaml</DependentUpon>
+	  </Compile>
 	</ItemGroup>
 
 </Project>

@@ -6,6 +6,7 @@ namespace EcoLibrariumServer.Data
     public class ApiContext : DbContext
     {
         public DbSet<User> Users { get; set; }
+        public DbSet<Species> Species { get; set; }
         public ApiContext(DbContextOptions<ApiContext> options) : base(options) { }
     }
 }

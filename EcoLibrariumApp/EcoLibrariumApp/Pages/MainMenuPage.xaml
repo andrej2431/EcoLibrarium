@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="EcoLibrariumApp.MainMenuPage"
+             xmlns:viewmodel="clr-namespace:EcoLibrariumApp.ViewModels"
+             x:DataType="viewmodel:MainMenuViewModel"
+             Title="">
+
+
+    <ContentPage.Background>
+        <LinearGradientBrush EndPoint="1,0">
+            <GradientStop Color="Yellow"
+                          Offset="0.1" />
+            <GradientStop Color="Green"
+                          Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+
+    <VerticalStackLayout>
+        <Label Text="EcoLibrarium"
+               SemanticProperties.HeadingLevel="Level1"
+               FontSize="52"
+               TextColor="#214600"
+               HorizontalOptions="Center"
+               Margin="0,50,0,50" />
+        <VerticalStackLayout Spacing="2"
+                             Padding="20"
+                             VerticalOptions="Center"
+                             HorizontalOptions="Center"
+                             BackgroundColor="White"
+                             WidthRequest="400">
+            <Label Text="Main Menu"
+                   SemanticProperties.HeadingLevel="Level1"
+                   FontSize="32"
+                   TextColor="#4D4D4D"
+                   HorizontalOptions="Center"
+                   Padding="0,0,0,20" />
+
+            <Button x:Name="SearchBtn"
+                    Text="Quick Search"
+                    SemanticProperties.Hint="Quickly get species info by it's latin or common name"
+                    Style="{StaticResource CommonButton}" />
+
+            <Button x:Name="QuickBtn"
+                    Text="Quick Quiz"
+                    SemanticProperties.Hint="Quickly quiz yourself on a specific species"
+                    Style="{StaticResource CommonButton}" />
+
+
+            <Button x:Name="QuizzesBtn"
+                    Text="Saved Quizzes"
+                    SemanticProperties.Hint="Choose from a list of saved quizzes"
+                    Style="{StaticResource CommonButton}" />
+
+            <Button x:Name="SettingsBtn"
+                    Text="Settings"
+                    SemanticProperties.Hint="User settings"
+                    Style="{StaticResource CommonButton}" />
+
+            <Button x:Name="LogoutBtn"
+                    Text="Log out"
+                    SemanticProperties.Hint="Logs out current user"
+                    Style="{StaticResource CommonButton}"
+                    Command="{Binding LogoutCommand}"/>
+
+
+
+
+
+        </VerticalStackLayout>
+    </VerticalStackLayout>
+</ContentPage>

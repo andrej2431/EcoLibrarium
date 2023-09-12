@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using EcoLibrariumApp.Services;
+using EcoLibrariumApp.ViewModels;
+using Microsoft.Extensions.Logging;
 
 namespace EcoLibrariumApp
 {
@@ -15,8 +17,21 @@ namespace EcoLibrariumApp
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
+            builder.Services.AddSingleton<EncryptionService>();
+
+            // Pages
+            builder.Services.AddTransient<LoginPage>();
+            builder.Services.AddTransient<RegisterPage>();
+            builder.Services.AddTransient<MainMenuPage>();
+            builder.Services.AddTransient<SpeciesInfoPage>();
+
+            // View Models
+            builder.Services.AddTransient<LoginViewModel>();
+            builder.Services.AddTransient<RegisterViewModel>();
+            builder.Services.AddTransient<MainMenuViewModel>();
+            builder.Services.AddTransient<SpeciesInfoViewModel>();
 #if DEBUG
-		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();

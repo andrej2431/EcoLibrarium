@@ -1,5 +1,6 @@
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using EcoLibrariumServer.Data;
+using EcoLibrariumServer.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 

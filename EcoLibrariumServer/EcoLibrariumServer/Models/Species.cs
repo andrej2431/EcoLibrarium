@@ -20,4 +20,5 @@ namespace EcoLibrariumServer.Models
 
         public Dictionary<string, string> Data;
     }
+
 }
