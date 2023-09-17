@@ -5,15 +5,16 @@ using System.Text.Json.Serialization;
 
 namespace EcoLibrariumServer.Models
 {
-    [Index(nameof(User.Email),IsUnique = true)]
+    [Index(nameof(User.Email), IsUnique = true)]
     public class User
     {
-        public User(string name, string email, string passwordHash) {
+        public User(string name, string email, string passwordHash)
+        {
             Name = name;
             Email = email;
             PasswordHash = passwordHash;
 
-            Admin = false;
+            Role = "User";
             SessionId = "";
         }
 
@@ -22,8 +23,8 @@ namespace EcoLibrariumServer.Models
         public int Id { get; set; }
 
         [Required]
-        [StringLength(15,MinimumLength = 5)]
-        public string  Name { get; set; }
+        [StringLength(15, MinimumLength = 5)]
+        public string Name { get; set; }
 
         [Required]
         public string Email { get; set; }
@@ -31,7 +32,7 @@ namespace EcoLibrariumServer.Models
         [Required]
         public string PasswordHash { get; set; }
 
-        public bool Admin {  get; set; }
+        public string Role { get; set; }
 
         public string SessionId { get; set; }
 
@@ -56,5 +57,11 @@ namespace EcoLibrariumServer.Models
 
         [Required]
         public string PasswordHash { get; set; }
+    }
+
+    public class SessionInfo
+    {
+        [Required]
+        public string SessionId { get; set; }
     }
 }

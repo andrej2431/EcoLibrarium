@@ -1,8 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using EcoLibrariumApp.Services;
-using System.Text;
-using System.Text.Json;
+
 
 namespace EcoLibrariumApp.ViewModels
 {
@@ -21,56 +20,32 @@ namespace EcoLibrariumApp.ViewModels
         [RelayCommand]
         async Task Register()
         {
-            if (Username == null || Email == null || Password == null)
+            var registerResult = await AuthenticationService.Register(Username, Email, Password);
+
+            if (registerResult.Success)
             {
-                await Application.Current.MainPage.DisplayAlert("Error 1", "Username, Email and Password cannot be empty.", "OK");
-                return;
-            }
 
-            string passwordHash = EncryptionService.EncryptUsingSha256(Password);
-
-            using (HttpClient httpClient = new HttpClient())
-            {
-                // REGISTER
-                string jsonData = $"{{\"name\":\"{Username}\",\"email\":\"{Email}\",\"passwordHash\":\"{passwordHash}\"}}";
-                HttpContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await httpClient.PostAsync("https://localhost:7033/register", content); // TODO BETTER LINKS
-
-                if (!response.IsSuccessStatusCode)
+                var loginResult = await AuthenticationService.LogIn(Email, Password);
+                if (loginResult.Success)
                 {
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    await Application.Current.MainPage.DisplayAlert("Error 2", responseContent, "OK");
-                    return;
-                }
-
-                // LOGIN
-                jsonData = $"{{\"email\":\"{Email}\",\"passwordHash\":\"{passwordHash}\"}}";
-                content = new StringContent(jsonData, Encoding.UTF8, "application/json");
-                response = await httpClient.PostAsync("https://localhost:7033/login", content); // TODO BETTER LINKS
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    await Application.Current.MainPage.DisplayAlert("Error 3", responseContent, "OK");
-                    return;
-                }
-                var jsonDocument = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
-                if (jsonDocument.RootElement.TryGetProperty("value", out var valueElement) && valueElement.ValueKind == JsonValueKind.String)
-                {
-                    string sessionId = valueElement.GetString();
-                    await Application.Current.MainPage.Navigation.PushAsync(new MainMenuPage(sessionId)); // TODO NAVIGATION
+                    await NavigationService.NavigateTo(new MainMenuPage());
                 }
                 else
                 {
-                    await Application.Current.MainPage.DisplayAlert("Error 4", "SessionId for log in not recieved from server.", "OK"); // TODO NOTIFY
+                    await MessageService.showMessage($"Register successful, error during login: {loginResult.Message}");
+                    await NavigationService.NavigateTo(new LoginPage());
                 }
+            }
+            else
+            {
+                await MessageService.showMessage($"Error during registration: {registerResult.Message}");
             }
         }
 
         [RelayCommand]
-        async Task NavigateToRegisterPage()
+        async Task NavigateToLoginPage()
         {
-            await Application.Current.MainPage.Navigation.PushAsync(new RegisterPage()); // TODO NAVIGATION
+            await NavigationService.NavigateTo(new LoginPage());
         }
     }
 }

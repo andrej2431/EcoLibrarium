@@ -14,25 +14,27 @@ namespace EcoLibrariumServer.Controllers
     {
         private readonly ApiContext _context;
 
-        
+
         public UserController(ApiContext context)
         {
             _context = context;
         }
 
-        [HttpPost("/register")]
-        public IActionResult CreateUser([FromBody] RegisterUserCredentials userCredentials) {
+        [HttpPost("register")]
+        public IActionResult CreateUser([FromBody] RegisterUserCredentials userCredentials)
+        {
             var userValidator = new RegisterUserCredentialsValidator();
             var validationResult = userValidator.Validate(userCredentials);
 
-            if(!validationResult.IsValid) { 
+            if (!validationResult.IsValid)
+            {
                 return BadRequest("Invalid user info");
             }
 
             var userWithSameUsername = from u in _context.Users
                                        where u.Name == userCredentials.Name
                                        select u;
-            if(userWithSameUsername.Count() > 0)
+            if (userWithSameUsername.Count() > 0)
             {
                 return BadRequest("There already exists a user with that username.");
             }
@@ -40,7 +42,7 @@ namespace EcoLibrariumServer.Controllers
             var userWithSameEmail = from u in _context.Users
                                     where u.Email == userCredentials.Email
                                     select u;
-            if(userWithSameEmail.Count() > 0)
+            if (userWithSameEmail.Count() > 0)
             {
                 return BadRequest("There already exists a user with that email.");
             }
@@ -52,13 +54,13 @@ namespace EcoLibrariumServer.Controllers
             return Ok();
         }
 
-        [HttpPost("/login")]
+        [HttpPost("login")]
         public IActionResult LoginUser([FromBody] LoginUserCredentials userCredentials)
         {
             var userValidator = new LoginUserCredentialsValidator();
             var validationResult = userValidator.Validate(userCredentials);
 
-            if(!validationResult.IsValid)
+            if (!validationResult.IsValid)
             {
                 return BadRequest(validationResult.Errors.FirstOrDefault()?.ErrorMessage);
             }
@@ -69,23 +71,35 @@ namespace EcoLibrariumServer.Controllers
             {
                 return BadRequest("User with that email doesn't exist.");
             }
-            
-            if(userInDatabase.PasswordHash != userCredentials.PasswordHash)
+
+            if (userInDatabase.PasswordHash != userCredentials.PasswordHash)
             {
                 return BadRequest("Wrong password.");
             }
 
-            Guid sessionId  = Guid.NewGuid();
+            Guid sessionId = Guid.NewGuid();
             userInDatabase.SessionId = sessionId.ToString();
             _context.SaveChanges();
 
-            return Ok(sessionId.ToString());
+            var response = new
+            {
+                username = userInDatabase.Name,
+                email = userInDatabase.Email,
+                sessionId = userInDatabase.SessionId,
+            };
+
+            return Ok(response);
         }
 
-        [HttpPost("/logout/{sessionId}")]
-        public IActionResult LogoutUser(string sessionId)
+        [HttpPost("logout")]
+        public IActionResult LogoutUser([FromBody] SessionInfo sessionInfo)
         {
-            var userInDatabase = _context.Users.FirstOrDefault(u => u.SessionId == sessionId);
+            if (sessionInfo == null || string.IsNullOrEmpty(sessionInfo.SessionId))
+            {
+                return BadRequest("No sessionId recieved");
+            }
+
+            var userInDatabase = _context.Users.FirstOrDefault(u => u.SessionId == sessionInfo.SessionId);
 
             if (userInDatabase == null)
             {

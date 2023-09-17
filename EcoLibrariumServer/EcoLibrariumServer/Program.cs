@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using EcoLibrariumServer.Data;
 using EcoLibrariumServer.Controllers;
+using EcoLibrariumServer.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

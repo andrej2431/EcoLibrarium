@@ -40,23 +40,27 @@
             <Button x:Name="SearchBtn"
                     Text="Quick Search"
                     SemanticProperties.Hint="Quickly get species info by it's latin or common name"
-                    Style="{StaticResource CommonButton}" />
+                    Style="{StaticResource CommonButton}"
+                    Command="{Binding NavigateToQuickSearchCommand}"/>
 
             <Button x:Name="QuickBtn"
                     Text="Quick Quiz"
                     SemanticProperties.Hint="Quickly quiz yourself on a specific species"
-                    Style="{StaticResource CommonButton}" />
+                    Style="{StaticResource CommonButton}"
+                    Command="{Binding NavigateToQuickQuizCommand}"/>
 
 
             <Button x:Name="QuizzesBtn"
                     Text="Saved Quizzes"
                     SemanticProperties.Hint="Choose from a list of saved quizzes"
-                    Style="{StaticResource CommonButton}" />
+                    Style="{StaticResource CommonButton}"
+                    Command="{Binding NavigateToSavedQuizzesCommand}"/>
 
             <Button x:Name="SettingsBtn"
                     Text="Settings"
                     SemanticProperties.Hint="User settings"
-                    Style="{StaticResource CommonButton}" />
+                    Style="{StaticResource CommonButton}"
+                    Command="{Binding NavigateToSettingsCommand }"/>
 
             <Button x:Name="LogoutBtn"
                     Text="Log out"

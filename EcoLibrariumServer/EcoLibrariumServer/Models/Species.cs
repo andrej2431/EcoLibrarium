@@ -14,6 +14,7 @@ namespace EcoLibrariumServer.Models
         [Required]
         [StringLength(100)]
         public string LatinName { get; set; }
+
         [Required]
         [StringLength(100)]
         public string Name { get; set; }

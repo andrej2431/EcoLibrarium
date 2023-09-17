@@ -1,12 +1,25 @@
 using EcoLibrariumApp.ViewModels;
+using EcoLibrariumApp.Services;
 
 namespace EcoLibrariumApp;
 
 public partial class MainMenuPage : ContentPage
 {
-	public MainMenuPage(string sessionId)
+	public MainMenuPage()
 	{
+
 		InitializeComponent();
 		BindingContext = new MainMenuViewModel();
+		
 	}
+
+	protected override async void OnAppearing()
+	{
+		base.OnAppearing();
+
+        if (!AuthenticationService.IsLoggedIn())
+        {
+            await NavigationService.NavigateTo(new LoginPage());
+        }
+    }
 }

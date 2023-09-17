@@ -18,6 +18,9 @@ namespace EcoLibrariumApp
                 });
 
             builder.Services.AddSingleton<EncryptionService>();
+            builder.Services.AddSingleton<AuthenticationService>();
+            builder.Services.AddSingleton<MessageService>();
+            builder.Services.AddSingleton<NavigationService>();
 
             // Pages
             builder.Services.AddTransient<LoginPage>();

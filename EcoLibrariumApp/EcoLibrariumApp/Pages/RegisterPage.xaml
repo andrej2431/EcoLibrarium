@@ -77,6 +77,7 @@
                    TextColor="#A3A3A3"
                    Placeholder="Enter your password"
                    Text="{Binding Password}"
+                   ReturnCommand="{Binding RegisterCommand}"
                    />
 
             <Button x:Name="RegisterBtn"
@@ -95,7 +96,7 @@
                     HorizontalOptions="Center"
                     BackgroundColor="#80FFFFFF"
                     Margin="0,20,0,0"
-                    Command="{Binding NavigateToRegisterPageCommand}">
+                    Command="{Binding NavigateToLoginPageCommand}">
             </Button>
 
 
