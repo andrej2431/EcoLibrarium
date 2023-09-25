@@ -50,6 +50,13 @@ namespace EcoLibrariumServer.Controllers
             return Ok();
         }
 
+        [HttpGet]
+        public IActionResult GetAll()
+        {
+            var speciesQuery = _context.Species.Include(species => species.speciesProperties);
+            return Ok(speciesQuery.ToList());
+        }
+
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
@@ -61,6 +68,7 @@ namespace EcoLibrariumServer.Controllers
 
             return Ok(speciesQuery.Include(species=>species.speciesProperties).ToList());
         }
+
 
 
         [HttpGet("latin/{latinName}")]

@@ -51,17 +51,8 @@ namespace EcoLibrariumApp.ViewModels
         public async Task Search()
         {
             SearchResults.Clear();
-
-            if (string.IsNullOrEmpty(SearchText)) {
-                NoResultsFoundLabelVisible = true;
-                return;
-            }
-
-
-
-            
-
-            var response = await HttpService.GetRequest($"{HttpService.ApiUrls.SpeciesByCommon}/{SearchText}");
+            var url = string.IsNullOrEmpty(SearchText) ? HttpService.ApiUrls.SpeciesAll : $"{HttpService.ApiUrls.SpeciesByCommon}/{SearchText}";
+            var response = await HttpService.GetRequest(url);
             string responseContent = await response.Content.ReadAsStringAsync();
 
             if (!response.IsSuccessStatusCode)
@@ -73,7 +64,7 @@ namespace EcoLibrariumApp.ViewModels
             NoResultsFoundLabelVisible = false;
             List<Species> speciesCollection = JsonConvert.DeserializeObject<List<Species>>(responseContent);
 
-            foreach(Species species in speciesCollection)
+            foreach (Species species in speciesCollection)
             {
                 SearchResults.Add(species);
             }
@@ -84,7 +75,7 @@ namespace EcoLibrariumApp.ViewModels
         {
             ResultInfo = species;
             ResultProperties = new ObservableCollection<SpeciesProperty>(species.speciesProperties);
-           
+
             SearchResultsVisible = false;
             SpeciesInfoVisible = true;
         }

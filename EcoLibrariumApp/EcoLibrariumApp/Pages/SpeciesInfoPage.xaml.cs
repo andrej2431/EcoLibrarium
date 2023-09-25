@@ -1,3 +1,4 @@
+using EcoLibrariumApp.Services;
 using EcoLibrariumApp.ViewModels;
 
 namespace EcoLibrariumApp;
@@ -12,7 +13,14 @@ public partial class SpeciesInfoPage : ContentPage
         BindingContext = _viewModel;
     }
 
-	public void ShowSearchResults(object sender, EventArgs e)
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+		await _viewModel.Search();
+    }
+
+    public void ShowSearchResults(object sender, EventArgs e)
 	{
 		_viewModel.ShowSearchResults();
 	}

@@ -26,6 +26,8 @@ namespace EcolibrariumServer.Controllers
 
         abstract public IActionResult Add(InfoType quizInfo);
 
+        abstract public IActionResult GetAll(bool includePublic, bool onlySaved);
+
         abstract public IActionResult GetById(int id);
 
         abstract public IActionResult GetByName(string name, bool includePublic, bool onlySaved);

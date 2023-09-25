@@ -17,14 +17,15 @@
 
     </ContentPage.Background>
 
-
-    <VerticalStackLayout>
+    <ScrollView>
+        <VerticalStackLayout>
         <Label Text="EcoLibrarium"
                SemanticProperties.HeadingLevel="Level1"
                FontSize="52"
                TextColor="#214600"
                HorizontalOptions="Center"
                Margin="0,50,0,50" />
+        
         <VerticalStackLayout Spacing="2"
                              Padding="20"
                              VerticalOptions="Center"
@@ -40,6 +41,102 @@
                    HorizontalOptions="Center"
                    Padding="0,0,0,20" />
 
+            <!--<SearchBar Text="{Binding }"
+                       HeightRequest="50"
+                       Placeholder="Search"
+                       BackgroundColor="#EEEEEE"
+                       TextColor="#4D4D4D"
+                       SearchCommand="{Binding }">
+            </SearchBar>-->
+
+            
+
+            <Button x:Name="AddQQuizBtn"
+                    Text="Add QQuiz"
+                    Style="{StaticResource CommonButton}"
+                    HorizontalOptions="Center"
+                    Margin="0,20,0,0"
+                    Command="{Binding AddQuickQuizCommand}">
+            </Button>
+
+            <Button x:Name="GetAllQQuizzes"
+                    Text="Get All QQuizzes"
+                    Style="{StaticResource CommonButton}"
+                    HorizontalOptions="Center"
+                    Margin="0,20,0,0"
+                    Command="{Binding GetAllQuickQuizzesCommand}">
+            </Button>
+            <Button x:Name="GetQQuizById"
+                    Text="Get QQuiz by Id"
+                    Style="{StaticResource CommonButton}"
+                    HorizontalOptions="Center"
+                    Margin="0,20,0,0"
+                    Command="{Binding GetQuickQuizByIdCommand}">
+            </Button>
+
+            <Button x:Name="GetQQuizByName"
+                    Text="Get QQuiz by name"
+                    Style="{StaticResource CommonButton}"
+                    HorizontalOptions="Center"
+                    Margin="0,20,0,0"
+                    Command="{Binding GetQuickQuizByNameCommand}">
+            </Button>
+
+            <Button x:Name="UploadQQuiz"
+                    Text="Upload QQuiz"
+                    Style="{StaticResource CommonButton}"
+                    HorizontalOptions="Center"
+                    Margin="0,20,0,0"
+                    Command="{Binding UploadQuickQuizCommand}">
+            </Button>
+
+            
+            <Button x:Name="AddQuizBtn"
+                    Text="Add quiz"
+                    Style="{StaticResource CommonButton}"
+                    HorizontalOptions="Center"
+                    Margin="0,20,0,0"
+                    Command="{Binding AddQuizCommand}">
+            </Button>
+
+            <Button x:Name="GetAllQuizzes"
+                    Text="Get all quizzes"
+                    Style="{StaticResource CommonButton}"
+                    HorizontalOptions="Center"
+                    Margin="0,20,0,0"
+                    Command="{Binding GetAllQuizzesCommand}">
+            </Button>
+
+            <Button x:Name="GetQuizById"
+                    Text="Get quiz by Id"
+                    Style="{StaticResource CommonButton}"
+                    HorizontalOptions="Center"
+                    Margin="0,20,0,0"
+                    Command="{Binding GetQuizByIdCommand}">
+            </Button>
+
+            <Button x:Name="GetQuizByName"
+                    Text="Get quiz by name"
+                    Style="{StaticResource CommonButton}"
+                    HorizontalOptions="Center"
+                    Margin="0,20,0,0"
+                    Command="{Binding GetQuizByNameCommand}">
+            </Button>
+
+            <Button x:Name="UploadQuiz"
+                    Text="Upload quiz"
+                    Style="{StaticResource CommonButton}"
+                    HorizontalOptions="Center"
+                    Margin="0,20,0,0"
+                    Command="{Binding UploadQuizCommand}">
+            </Button>
+
+            
+
+
+
         </VerticalStackLayout>
+        
     </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

@@ -40,6 +40,13 @@ namespace EcoLibrariumServer.Controllers
             return Ok();
         }
 
+        [HttpGet]
+        public override IActionResult GetAll(bool includePublic = true, bool onlySaved = false)
+        {
+            List<SpeciesQuiz> quizzes = GetQuizzesByName("", includePublic).ToList();
+            return Ok(quizzes);
+        }
+
         [HttpGet("{id}")]
         public override IActionResult GetById(int id)
         {

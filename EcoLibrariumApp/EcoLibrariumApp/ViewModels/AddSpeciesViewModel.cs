@@ -20,8 +20,8 @@ namespace EcoLibrariumApp.ViewModels
         [RelayCommand]
         public void AddProperty() {
             var property = new SpeciesProperty();
-            property.Name = "random ass name";
-            property.Value = "Random ass data";
+            property.Name = "";
+            property.Value = "";
 
             PropertyList.Add(property);
         }

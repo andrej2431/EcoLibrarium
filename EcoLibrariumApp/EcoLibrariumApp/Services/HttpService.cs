@@ -14,19 +14,29 @@ namespace EcoLibrariumApp.Services
         {
             public const string BaseUrl = "https://localhost:7290";
 
-            public const string Login = "/api/User/login";
-            public const string Register = "/api/User/register";
-            public const string Logout = "/api/User/logout";
-            public const string UserInfo = "/api/User/userinfo";
-            public const string Promote = "/api/User/promote";
+            public const string Login = "/api/user/login";
+            public const string Register = "/api/user/register";
+            public const string Logout = "/api/user/logout";
+            public const string UserInfo = "/api/user/userinfo";
+            public const string Promote = "/api/user/promote";
 
-            
-            public const string SpeciesById = "/api/Species";
-            public const string SpeciesByLatin = "/api/Species/latin";
-            public const string SpeciesByCommon = "/api/Species/common";
-            public const string SpeciesAdd = "/api/Species/add";
+            public const string SpeciesAll = "/api/species";
+            public const string SpeciesById = "/api/species";
+            public const string SpeciesByLatin = "/api/species/latin";
+            public const string SpeciesByCommon = "/api/species/common";
+            public const string SpeciesAdd = "/api/species";
 
+            public const string QuickQuizzesAll = "/api/speciesquiz";
+            public const string QuickQuizzesById = "/api/speciesquiz";
+            public const string QuickQuizzesByName = "/api/speciesquiz/name";
+            public const string QuickQuizzesAdd = "/api/speciesquiz";
+            public const string QuickQuizzesUpload = "/api/speciesquiz";
 
+            public const string QuizzesAll = "/api/quizcollection";
+            public const string QuizzesById = "/api/quizcollection";
+            public const string QuizzesByName = "/api/quizcollection/name";
+            public const string QuizzesAdd = "/api/quizcollection";
+            public const string QuizzesUpload = "/api/quizcollection";
         }
 
         private static HttpClientHandler _httpClientHandler;
