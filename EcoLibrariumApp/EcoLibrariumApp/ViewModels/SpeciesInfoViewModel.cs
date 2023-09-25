@@ -13,19 +13,52 @@ namespace EcoLibrariumApp.ViewModels
         private string searchText;
 
         [ObservableProperty]
-        private ObservableCollection<string> searchResults = new ObservableCollection<string>();
+        private bool noResultsFoundLabelVisible = true;
+
+        [ObservableProperty]
+        private bool searchResultsVisible = true;
+
+        [ObservableProperty]
+        private bool speciesInfoVisible = false;
+
+        [ObservableProperty]
+        private Species resultInfo;
+
+        [ObservableProperty]
+        private ObservableCollection<SpeciesProperty> resultProperties = new();
+
+
+
+        [ObservableProperty]
+        private ObservableCollection<Species> searchResults = new();
 
         async partial void OnSearchTextChanged(string value)
         {
             await Search();
         }
 
+        public void ShowSearchResults()
+        {
+            SearchResultsVisible = true;
+        }
+
+        public void HideSearchResults()
+        {
+            SearchResultsVisible = false;
+        }
+
         [RelayCommand]
         public async Task Search()
         {
-            if (string.IsNullOrEmpty(SearchText)) { return; }
-
             SearchResults.Clear();
+
+            if (string.IsNullOrEmpty(SearchText)) {
+                NoResultsFoundLabelVisible = true;
+                return;
+            }
+
+
+
             
 
             var response = await HttpService.GetRequest($"{HttpService.ApiUrls.SpeciesByCommon}/{SearchText}");
@@ -33,17 +66,27 @@ namespace EcoLibrariumApp.ViewModels
 
             if (!response.IsSuccessStatusCode)
             {
-                SearchResults.Add($"Search failed! {responseContent}");
+                NoResultsFoundLabelVisible = true;
                 return;
             }
 
+            NoResultsFoundLabelVisible = false;
             List<Species> speciesCollection = JsonConvert.DeserializeObject<List<Species>>(responseContent);
 
             foreach(Species species in speciesCollection)
             {
-                
-                SearchResults.Add(species.Name);
+                SearchResults.Add(species);
             }
+        }
+
+        [RelayCommand]
+        public void OpenSpeciesInfo(Species species)
+        {
+            ResultInfo = species;
+            ResultProperties = new ObservableCollection<SpeciesProperty>(species.speciesProperties);
+           
+            SearchResultsVisible = false;
+            SpeciesInfoVisible = true;
         }
     }
 }

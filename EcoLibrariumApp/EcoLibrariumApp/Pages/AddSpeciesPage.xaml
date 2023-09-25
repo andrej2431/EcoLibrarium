@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="EcoLibrariumApp.AddSpeciesPage"
+             xmlns:local="clr-namespace:EcoLibrariumApp"
+             xmlns:viewmodel="clr-namespace:EcoLibrariumApp.ViewModels"
+             xmlns:models="clr-namespace:EcoLibrariumApp.Models"
+             x:DataType="viewmodel:AddSpeciesViewModel"
+             Title="">
+    <ContentPage.Background>
+
+        <LinearGradientBrush EndPoint="1,0">
+            <GradientStop Color="Yellow"
+                          Offset="0.1" />
+            <GradientStop Color="Green"
+                          Offset="1.0" />
+        </LinearGradientBrush>
+
+    </ContentPage.Background>
+
+    <ScrollView>
+    <VerticalStackLayout>
+        <Label Text="EcoLibrarium"
+               SemanticProperties.HeadingLevel="Level1"
+               FontSize="52"
+               TextColor="#214600"
+               HorizontalOptions="Center"
+               Margin="0,50,0,50" />
+        <VerticalStackLayout Spacing="2"
+                             Padding="20"
+                             VerticalOptions="Center"
+                             HorizontalOptions="Center"
+                             BackgroundColor="White"
+                             WidthRequest="600">
+
+
+            <Label Text="Add Species"
+                   SemanticProperties.HeadingLevel="Level1"
+                   FontSize="32"
+                   TextColor="#4D4D4D"
+                   HorizontalOptions="Center"
+                   Padding="0,0,0,20" />
+
+            <VerticalStackLayout Spacing="2"
+                                 Padding="20"
+                                 VerticalOptions="Center"
+                                 HorizontalOptions="Center"
+                                 BackgroundColor="White"
+                                 WidthRequest="600">
+
+                <Label Text="Latin Name"
+                       SemanticProperties.HeadingLevel="Level1"
+                       FontSize="20"
+                       TextColor="#A3A3A3"
+                       HorizontalOptions="Start" />
+
+                <Entry x:Name="latinNameEntry"
+                       BackgroundColor="#EEEEEE"
+                       TextColor="#A3A3A3"
+                       Text="{Binding LatinName}" />
+
+                <Label Text="Common Name"
+                       SemanticProperties.HeadingLevel="Level1"
+                       Padding="0,20,0,0"
+                       FontSize="20"
+                       TextColor="#A3A3A3"
+                       HorizontalOptions="Start" />
+
+                <Entry x:Name="commonNameEntry"
+                       BackgroundColor="#EEEEEE"
+
+                       TextColor="#A3A3A3"
+                       Text="{Binding CommonName}" />
+
+                <CollectionView ItemsSource="{Binding PropertyList}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:SpeciesProperty">
+                            <ContentView>
+
+                                    <VerticalStackLayout BackgroundColor="#D6F6AE"
+                                                         Padding="20,20,20,20"
+                                                         Margin="0,20,0,20">
+                                        
+                                        <Label Text="Custom Property"
+                                               SemanticProperties.HeadingLevel="Level1"
+                                               FontSize="20"
+                                               TextColor="#A3A3A3"
+                                               HorizontalOptions="Center" />
+                                    
+                                        <Label Text="Property Name"
+                                           SemanticProperties.HeadingLevel="Level1"
+                                           FontSize="20"
+                                           TextColor="#A3A3A3"
+                                           HorizontalOptions="Start"
+                                               Padding="0,20,0,0"/>
+
+                                    <Entry x:Name="propertyNameEntry"
+                                           BackgroundColor="#EEEEEE"
+                                           TextColor="#A3A3A3"
+                                           Text="{Binding Name}" />
+
+                                    <Label Text="Property Value"
+                                           SemanticProperties.HeadingLevel="Level1"
+                                           FontSize="20"
+                                           TextColor="#A3A3A3"
+                                           HorizontalOptions="Start"
+                                               Padding="0,20,0,0" />
+                                        
+
+                                    <Entry x:Name="propertyValueEntry"
+                                           TextColor="#A3A3A3"
+                                               BackgroundColor="#EEEEEE"
+                                               Text="{Binding Value}" />
+
+
+
+                                    <Button x:Name="removePropertyBtn"
+                                            Text="Remove Property"
+                                            SemanticProperties.Hint="Removes property to species"
+                                            Style="{StaticResource CommonButton}"
+                                            HorizontalOptions="Center"
+                                            Margin="0,20,0,0"
+                                            Command="{Binding RemovePropertyCommand, Source={RelativeSource AncestorType={x:Type viewmodel:AddSpeciesViewModel}}}"
+                                            CommandParameter="{Binding .}">
+                                    </Button>
+                                </VerticalStackLayout>
+
+                                
+                            </ContentView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+
+                <Button x:Name="addPropertyBtn"
+                        Text="Add Property"
+                        SemanticProperties.Hint="Adds property to species"
+                        Style="{StaticResource CommonButton}"
+                        HorizontalOptions="Center"
+                        Margin="0,20,0,0"
+                        Command="{Binding AddPropertyCommand}">
+                </Button>
+
+                <Button x:Name="submitBtn"
+                        Text="Submit"
+                        SemanticProperties.Hint="Submits form for adding species"
+                        Style="{StaticResource CommonButton}"
+                        HorizontalOptions="Center"
+                        Margin="0,20,0,0"
+                        Command="{Binding SumbitSpeciesInfoCommand}">
+                </Button>
+
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

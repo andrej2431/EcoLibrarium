@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using EcoLibrariumServer.Models;
 using EcoLibrariumServer.Data;
 using EcoLibrariumServer.Validators;
 using System.Diagnostics;
 using FluentValidation;
+using Microsoft.AspNetCore.Identity;
+using EcoLibrariumServer.Models.Authentication;
+using EcolibrariumServer.Models.Authentication;
+using Microsoft.AspNetCore.Authorization;
 
 namespace EcoLibrariumServer.Controllers
 {
@@ -13,49 +16,57 @@ namespace EcoLibrariumServer.Controllers
     public class UserController : ControllerBase
     {
         private readonly ApiContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-
-        public UserController(ApiContext context)
+        public UserController(ApiContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
+            this._userManager = userManager;
+            this._signInManager = signInManager;
+            this._roleManager = roleManager;
         }
 
         [HttpPost("register")]
-        public IActionResult CreateUser([FromBody] RegisterUserCredentials userCredentials)
+        public async Task<IActionResult> Register([FromBody] RegisterUserCredentials userCredentials)
         {
             var userValidator = new RegisterUserCredentialsValidator();
             var validationResult = userValidator.Validate(userCredentials);
+
 
             if (!validationResult.IsValid)
             {
                 return BadRequest("Invalid user info");
             }
 
-            var userWithSameUsername = from u in _context.Users
-                                       where u.Name == userCredentials.Name
-                                       select u;
-            if (userWithSameUsername.Count() > 0)
+            ApplicationUser user = new ApplicationUser()
             {
-                return BadRequest("There already exists a user with that username.");
+                Id = Guid.NewGuid().ToString(),
+                UserName = userCredentials.UserName,
+                Email = userCredentials.Email,
+                SecurityStamp = Guid.NewGuid().ToString()
+            };
+
+            var createResult = await _userManager.CreateAsync(user, userCredentials.Password);
+            if (!createResult.Succeeded)
+            {
+                return BadRequest("Couldn't create user.");
             }
 
-            var userWithSameEmail = from u in _context.Users
-                                    where u.Email == userCredentials.Email
-                                    select u;
-            if (userWithSameEmail.Count() > 0)
+            IdentityResult roleResult = await _userManager.AddToRoleAsync(user, "User");
+            if (!roleResult.Succeeded)
             {
-                return BadRequest("There already exists a user with that email.");
+                return BadRequest("Couldn't assign role to user.");
             }
 
-            User user = new User(userCredentials.Name, userCredentials.Email, userCredentials.PasswordHash);
-            _context.Users.Add(user);
-            _context.SaveChanges();
 
+            await _signInManager.SignInAsync(user, isPersistent: false);
             return Ok();
         }
 
         [HttpPost("login")]
-        public IActionResult LoginUser([FromBody] LoginUserCredentials userCredentials)
+        public async Task<IActionResult> Login([FromBody] LoginUserCredentials userCredentials)
         {
             var userValidator = new LoginUserCredentialsValidator();
             var validationResult = userValidator.Validate(userCredentials);
@@ -65,51 +76,86 @@ namespace EcoLibrariumServer.Controllers
                 return BadRequest(validationResult.Errors.FirstOrDefault()?.ErrorMessage);
             }
 
-            var userInDatabase = _context.Users.FirstOrDefault(u => u.Email == userCredentials.Email);
+            if (string.IsNullOrEmpty(userCredentials.Email) || string.IsNullOrEmpty(userCredentials.Password))
+            {
+                return BadRequest("Missing credentials.");
+            }
 
-            if (userInDatabase == null)
+            var user = await _userManager.FindByEmailAsync(userCredentials.Email);
+            if (user == null)
             {
                 return BadRequest("User with that email doesn't exist.");
             }
 
-            if (userInDatabase.PasswordHash != userCredentials.PasswordHash)
+            var result = await _signInManager.CheckPasswordSignInAsync(user, userCredentials.Password, lockoutOnFailure: false);
+            if(result.Succeeded)
             {
-                return BadRequest("Wrong password.");
+                await _signInManager.SignInAsync(user, isPersistent: false);
+                return Ok();
+            }
+            {
+                return BadRequest("Invalid credentials.");
+            }
+                
             }
 
-            Guid sessionId = Guid.NewGuid();
-            userInDatabase.SessionId = sessionId.ToString();
-            _context.SaveChanges();
-
-            var response = new
-            {
-                username = userInDatabase.Name,
-                email = userInDatabase.Email,
-                sessionId = userInDatabase.SessionId,
-            };
-
-            return Ok(response);
-        }
 
         [HttpPost("logout")]
-        public IActionResult LogoutUser([FromBody] SessionInfo sessionInfo)
+        public async Task<IActionResult> Logout()
         {
-            if (sessionInfo == null || string.IsNullOrEmpty(sessionInfo.SessionId))
+            await _signInManager.SignOutAsync();
+            return Ok();
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost("promote")]
+        public async Task<IActionResult> PromoteToAdmin([FromBody] PromoteToAdminInfo setRoleInfo)
+        {
+            if (setRoleInfo == null)
             {
-                return BadRequest("No sessionId recieved");
+                return BadRequest("Info on setting role not recieved.");
             }
 
-            var userInDatabase = _context.Users.FirstOrDefault(u => u.SessionId == sessionInfo.SessionId);
-
-            if (userInDatabase == null)
+            if (String.IsNullOrEmpty(setRoleInfo.Email))
             {
-                return BadRequest("User with that sessionId doesn't exist.");
+                return BadRequest("Email is required!");
             }
 
-            userInDatabase.SessionId = "";
-            _context.SaveChanges();
+            var user = await _userManager.FindByEmailAsync(setRoleInfo.Email);
+            if(user == null)
+            {
+                return BadRequest("User with that email doesn't exist");
+            }
+            
+            var result = await _userManager.AddToRoleAsync(user, "Admin");
+            if(!result.Succeeded)
+            {
+                return BadRequest("Unable to promote to admin.");
+            }
 
             return Ok();
+        }
+
+        [HttpGet("userinfo")]
+        public async Task<IActionResult> UserInfo()
+        {
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                return NotFound("User not found");
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            var userProfile = new
+            {
+                user.UserName,
+                user.Email,
+                Roles = roles
+            };
+
+            return Ok(userProfile);
         }
     }
 }

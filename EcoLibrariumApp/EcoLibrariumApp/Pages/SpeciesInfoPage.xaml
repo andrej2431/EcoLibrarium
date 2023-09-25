@@ -4,6 +4,7 @@
              x:Class="EcoLibrariumApp.SpeciesInfoPage"
              xmlns:local="clr-namespace:EcoLibrariumApp"
              xmlns:viewmodel="clr-namespace:EcoLibrariumApp.ViewModels"
+             xmlns:models="clr-namespace:EcoLibrariumApp.Models"
              x:DataType="viewmodel:SpeciesInfoViewModel"
              Title="">
     <ContentPage.Background>
@@ -17,50 +18,106 @@
 
     </ContentPage.Background>
 
+    <Grid>
 
-    <VerticalStackLayout>
-        <Label Text="EcoLibrarium"
-               SemanticProperties.HeadingLevel="Level1"
-               FontSize="52"
-               TextColor="#214600"
-               HorizontalOptions="Center"
-               Margin="0,50,0,50" />
-        <VerticalStackLayout Spacing="2"
-                             Padding="20"
-                             VerticalOptions="Center"
-                             HorizontalOptions="Center"
-                             BackgroundColor="White"
-                             WidthRequest="400">
-
-
-            <Label Text="SpeciesInfo"
+        <VerticalStackLayout>
+            <Label Text="EcoLibrarium"
                    SemanticProperties.HeadingLevel="Level1"
-                   FontSize="32"
-                   TextColor="#4D4D4D"
+                   FontSize="52"
+                   TextColor="#214600"
                    HorizontalOptions="Center"
-                   Padding="0,0,0,20" />
+                   Margin="0,50,0,50" />
+            <VerticalStackLayout Spacing="2"
+                                 Padding="20"
+                                 VerticalOptions="Center"
+                                 HorizontalOptions="Center"
+                                 BackgroundColor="White"
+                                 WidthRequest="800">
 
-            <SearchBar Text="{Binding SearchText}"
-                       Placeholder="Search"
+
+                <Label Text="SpeciesInfo"
+                       SemanticProperties.HeadingLevel="Level1"
+                       FontSize="32"
                        TextColor="#4D4D4D"
-                       SearchCommand="{Binding SearchCommand}">
+                       HorizontalOptions="Center"
+                       Padding="0,0,0,20" />
 
-            </SearchBar>
+                <SearchBar Text="{Binding SearchText}"
+                           HeightRequest="50"
+                           Focused="ShowSearchResults"
+                           Unfocused="HideSearchResults"
+                           Placeholder="Search"
+                           BackgroundColor="#EEEEEE"
+                           TextColor="#4D4D4D"
+                           SearchCommand="{Binding SearchCommand}">
 
-            <ListView ItemsSource="{Binding SearchResults}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
-                            <StackLayout Padding="10">
-                                <Label Text="{Binding}"
-                                       TextColor="black"
-                                       FontSize="32"/>
-                            </StackLayout>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                </SearchBar>
 
+                <AbsoluteLayout MinimumHeightRequest="400">
+                    <VerticalStackLayout ZIndex="2"
+                                         IsVisible="{Binding SearchResultsVisible}"
+                                         BackgroundColor="Beige"
+                                         AbsoluteLayout.LayoutBounds="0, 50, 1, 200"
+                                         HeightRequest="300"
+                                         Opacity="0.95"
+                                         AbsoluteLayout.LayoutFlags="WidthProportional">
+
+
+
+                        <Label Text="No results found."
+                               TextColor="black"
+                               FontSize="32"
+                               IsVisible="{Binding NoResultsFoundLabelVisible}">
+                        </Label>
+
+                        <CollectionView ItemsSource="{Binding SearchResults}"
+                                        HeightRequest="300">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="models:Species">
+                                    <StackLayout Padding="10">
+                                        <Label Text="{Binding CommonName}"
+                                               TextColor="black"
+                                               FontSize="32">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer CommandParameter="{Binding .}"
+                                                                      Command="{Binding OpenSpeciesInfoCommand, Source={RelativeSource AncestorType={x:Type viewmodel:SpeciesInfoViewModel}}}" />
+                                            </Label.GestureRecognizers>
+                                        </Label>
+                                    </StackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout ZIndex="1"
+                                         IsVisible="{Binding SpeciesInfoVisible}">
+                        <Label Text="{Binding ResultInfo.CommonName}"
+                               TextColor="black"
+                               FontSize="45" />
+
+                        <Label Text="{Binding ResultInfo.LatinName}"
+                               TextColor="DarkGrey"
+                               FontSize="32" />
+
+                        <CollectionView ItemsSource="{Binding ResultProperties}">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="models:SpeciesProperty">
+                                    <StackLayout Padding="10">
+                                        <Label Text="{Binding Name}"
+                                               TextColor="black"
+                                               FontSize="25" />
+
+                                        <Label Text="{Binding Value}"
+                                               TextColor="black"
+                                               FontSize="25" />
+
+                                    </StackLayout>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </AbsoluteLayout>
+            </VerticalStackLayout>
         </VerticalStackLayout>
-    </VerticalStackLayout>
+    </Grid>
 </ContentPage>

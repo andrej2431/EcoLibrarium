@@ -29,6 +29,12 @@ namespace EcoLibrariumApp.ViewModels
         }
 
         [RelayCommand]
+        async Task NavigateToAdminMenu()
+        {
+            await NavigationService.NavigateTo(new AdminMenuPage());
+        }
+
+        [RelayCommand]
         async Task NavigateToSettings()
         {
             await NavigationService.NavigateTo(new SettingsPage());

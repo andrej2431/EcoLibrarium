@@ -56,10 +56,19 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Pages\AddSpeciesPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\AdminMenuPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\LoginPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\MainMenuPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\PromoteUserPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\QuickQuizPage.xaml">
@@ -77,6 +86,9 @@
 	  <MauiXaml Update="Pages\SpeciesInfoPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Pages\UploadQuizPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 
 	<ItemGroup>
@@ -85,6 +97,9 @@
 	  </Compile>
 	  <Compile Update="MainMenuPage2.xaml.cs">
 	    <DependentUpon>MainMenuPage2.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\UploadQuizPage.xaml.cs">
+	    <DependentUpon>UploadQuizPage.xaml</DependentUpon>
 	  </Compile>
 	  <Compile Update="RegisterPage2.xaml.cs">
 	    <DependentUpon>RegisterPage2.xaml</DependentUpon>

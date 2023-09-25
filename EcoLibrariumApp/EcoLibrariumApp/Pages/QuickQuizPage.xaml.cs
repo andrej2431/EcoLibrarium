@@ -5,9 +5,9 @@ namespace EcoLibrariumApp;
 
 public partial class QuickQuizPage : ContentPage
 {
-	public QuickQuizPage()
-	{
-		InitializeComponent();
+    public QuickQuizPage()
+    {
+        InitializeComponent();
         BindingContext = new QuickQuizViewModel();
     }
 }

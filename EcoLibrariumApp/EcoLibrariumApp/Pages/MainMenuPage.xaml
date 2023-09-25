@@ -56,6 +56,12 @@
                     Style="{StaticResource CommonButton}"
                     Command="{Binding NavigateToSavedQuizzesCommand}"/>
 
+            <Button x:Name="AdminBtn"
+                    Text="Admin Menu"
+                    SemanticProperties.Hint="Shows Admin Menu to user"
+                    Style="{StaticResource CommonButton}"
+                    Command="{Binding NavigateToAdminMenuCommand}" />
+
             <Button x:Name="SettingsBtn"
                     Text="Settings"
                     SemanticProperties.Hint="User settings"

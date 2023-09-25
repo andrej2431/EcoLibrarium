@@ -17,9 +17,20 @@ public partial class MainMenuPage : ContentPage
 	{
 		base.OnAppearing();
 
+
         if (!AuthenticationService.IsLoggedIn())
         {
             await NavigationService.NavigateTo(new LoginPage());
         }
+
+		if(AuthenticationService.IsAdmin())
+		{
+            AdminBtn.IsVisible = true;
+        } else
+		{
+			AdminBtn.IsVisible = false;
+        }
+
+		
     }
 }

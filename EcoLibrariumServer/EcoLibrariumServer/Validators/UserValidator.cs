@@ -1,4 +1,4 @@
-﻿using EcoLibrariumServer.Models;
+﻿using EcoLibrariumServer.Models.Authentication;
 using FluentValidation;
 
 
@@ -12,7 +12,7 @@ namespace EcoLibrariumServer.Validators
             
             int minimumUsernameLength = 5, maximumUsernameLength = 15;
 
-            RuleFor(user => user.Name)
+            RuleFor(user => user.UserName)
                 .NotEmpty().WithMessage("Username is required.")
                 .MinimumLength(minimumUsernameLength).WithMessage($"Username has to be at least {minimumUsernameLength} characters long.")
                 .MaximumLength(maximumUsernameLength).WithMessage($"Username has to be at most {maximumUsernameLength} characters long.");
@@ -22,7 +22,7 @@ namespace EcoLibrariumServer.Validators
                 .EmailAddress().WithMessage("Invalid email format.");
 
             int minimumPasswordLength = 8, maximumPasswordLength = 256;
-            RuleFor(user => user.PasswordHash)
+            RuleFor(user => user.Password)
                 .NotEmpty().WithMessage("Password is required.")
                 .MinimumLength(minimumPasswordLength).WithMessage($"Password has to be at least {minimumPasswordLength} characters long.")
                 .MaximumLength(maximumPasswordLength).WithMessage($"Password has to be at most {maximumPasswordLength} characters long.");
@@ -41,7 +41,7 @@ namespace EcoLibrariumServer.Validators
                 .NotEmpty().WithMessage("Email is required.")
                 .EmailAddress().WithMessage("Invalid email format.");
 
-            RuleFor(user => user.PasswordHash)
+            RuleFor(user => user.Password)
                 .NotEmpty().WithMessage("Password is required.");
         }
     }
